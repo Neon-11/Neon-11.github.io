@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name — Research Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    a { color: #1a1a1a; }
+    a:hover { color: #555; }
+
+    /* ── TOP NAV ── */
+    #top-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 2rem;
+    }
+    #top-nav .site-name {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      color: #1a1a1a;
+    }
+    #top-nav .page-tabs { display: flex; gap: 0; }
+    #top-nav .page-tab {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 12px;
+      padding: 6px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #888;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.15s;
+    }
+    #top-nav .page-tab:hover { color: #333; }
+    #top-nav .page-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+    /* ── PAGE PANELS ── */
+    .page-panel { display: none; }
+    .page-panel.active { display: block; }
+
+    /* ── SHARED LAYOUT ── */
+    .inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    section { margin-bottom: 3rem; }
+
+    h2 {
+      font-size: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* ── HOME PAGE ── */
+    #page-home header { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid #ddd; }
+    #page-home header h1 { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+    #page-home header .subtitle { font-style: italic; color: #555; margin-bottom: 1rem; }
+    #page-home header .ext-links { font-family: 'Source Code Pro', monospace; font-size: 13px; }
+    #page-home header .ext-links a { margin-right: 1.25rem; text-decoration: none; color: #555; }
+    #page-home header .ext-links a:hover { color: #1a1a1a; text-decoration: underline; }
+
+    .about p { color: #333; margin-bottom: 0.75rem; }
+    .keywords { margin-top: 0.75rem; font-family: 'Source Code Pro', monospace; font-size: 12px; color: #999; }
+
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; margin-top: 0.5rem; }
+    .meta-item dt { font-family: 'Source Code Pro', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #bbb; margin-bottom: 2px; }
+    .meta-item dd { font-size: 16px; color: #333; }
+
+    /* ── PUB TABS (inside Publications page) ── */
+    .sub-tabs { display: flex; margin-bottom: 1.5rem; border-bottom: 1px solid #ddd; }
+    .sub-tab-btn {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 12px;
+      padding: 7px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #888;
+      cursor: pointer;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+    }
+    .sub-tab-btn:hover { color: #333; }
+    .sub-tab-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+    .sub-panel { display: none; }
+    .sub-panel.active { display: block; }
+
+    /* ── PUB ITEMS ── */
+    .pub-item { margin-bottom: 1.75rem; padding-bottom: 1.75rem; border-bottom: 1px solid #f0f0f0; }
+    .pub-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .pub-venue { font-family: 'Source Code Pro', monospace; font-size: 12px; color: #999; margin-bottom: 4px; }
+    .pub-title { font-weight: 600; font-size: 17px; margin-bottom: 3px; line-height: 1.4; }
+    .pub-title a { text-decoration: none; }
+    .pub-title a:hover { text-decoration: underline; }
+    .pub-authors { font-style: italic; color: #555; font-size: 15px; margin-bottom: 6px; }
+    .pub-abstract { font-size: 15px; color: #666; }
+    .badge {
+      display: inline-block;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 11px;
+      padding: 1px 7px;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      color: #777;
+    }
+
+    /* ── HIGHLIGHTS PAGE ── */
+    .highlight-item { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #f0f0f0; }
+    .highlight-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .highlight-label { font-family: 'Source Code Pro', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #bbb; margin-bottom: 6px; }
+    .highlight-title { font-size: 19px; font-weight: 600; margin-bottom: 6px; line-height: 1.35; }
+    .highlight-body { font-size: 16px; color: #444; line-height: 1.75; margin-bottom: 10px; }
+    .highlight-meta { font-family: 'Source Code Pro', monospace; font-size: 12px; color: #999; }
+    .highlight-meta a { color: #777; }
+    .highlight-meta a:hover { color: #1a1a1a; }
+
+    /* ── HIGHLIGHTS PAGE ── */
+    .gallery-note { font-style: italic; color: #555; margin-bottom: 1.5rem; font-size: 16px; line-height: 1.8; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
+    .gallery-item { aspect-ratio: 1; background: #f5f5f5; border: 1px solid #e8e8e8; overflow: hidden; position: relative; }
+    .gallery-item:first-child { grid-column: span 2; aspect-ratio: 2/1; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-item .placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Source Code Pro', monospace; font-size: 11px; color: #ccc;
+      text-align: center; line-height: 1.8; padding: 1rem;
+    }
+    .equipment { font-family: 'Source Code Pro', monospace; font-size: 12px; color: #999; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; }
+
+    /* ── CONTACT PAGE ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem 2rem; }
+    .contact-item dt { font-family: 'Source Code Pro', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #bbb; margin-bottom: 2px; }
+    .contact-item dd { font-size: 16px; }
+    .contact-item dd a { color: #1a1a1a; text-decoration: none; }
+    .contact-item dd a:hover { text-decoration: underline; }
+    .contact-note { font-style: italic; color: #666; font-size: 16px; margin-bottom: 1.5rem; }
+
+    footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid #eee; font-family: 'Source Code Pro', monospace; font-size: 11px; color: #ccc; }
+
+    @media (max-width: 520px) {
+      #top-nav { padding: 0.6rem 1rem; }
+      #top-nav .page-tab { padding: 6px 10px; font-size: 11px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: span 2; }
+      .contact-grid, .meta-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="top-nav">
+  <a class="site-name" href="#" onclick="showPage('home');return false;">Your Name</a>
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="showPage('home')">About</button>
+    <button class="page-tab" onclick="showPage('highlights')">Research Highlights</button>
+    <button class="page-tab" onclick="showPage('publications')">Publications</button>
+    <button class="page-tab" onclick="showPage('beyond')">Beyond Research</button>
+    <button class="page-tab" onclick="showPage('contact')">Contact</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PAGE: ABOUT / HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="page-panel active">
+  <div class="inner">
+
+    <header>
+      <h1>Your Full Name</h1>
+      <p class="subtitle">[Your Role] · [Your University / Institution]</p>
+      <div class="ext-links">
+        <a href="cv.pdf" target="_blank">CV ↗</a>
+        <a href="https://github.com/yourusername" target="_blank">GitHub ↗</a>
+        <a href="https://scholar.google.com" target="_blank">Google Scholar ↗</a>
+        <a href="mailto:you@email.com">Email</a>
+      </div>
+    </header>
+
+    <section class="about">
+      <h2>Research</h2>
+      <p>
+        [Write 2–3 sentences about your research focus. What problem are you working on, what methods do you use, and what is the broader impact?]
+      </p>
+      <p>
+        [Optional second paragraph — current projects, collaborators, or future directions.]
+      </p>
+      <p class="keywords">Keywords: [keyword 1] · [keyword 2] · [keyword 3] · [keyword 4] · [keyword 5]</p>
+    </section>
+
+    <section>
+      <h2>Details</h2>
+      <dl class="meta-grid">
+        <div class="meta-item">
+          <dt>Institution</dt>
+          <dd>[Your University, Country]</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Supervisor</dt>
+          <dd>Prof. [Name]</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Degree</dt>
+          <dd>[M.Sc. / B.Eng.] in [Field], [Year]</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Research Group</dt>
+          <dd>[Lab / Group name]</dd>
+        </div>
+      </dl>
+    </section>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: RESEARCH HIGHLIGHTS
+════════════════════════════════════════ -->
+<div id="page-highlights" class="page-panel">
+  <div class="inner">
+
+    <section>
+      <h2>Research Highlights</h2>
+
+      <div class="highlight-item">
+        <p class="highlight-label">Finding · [Year]</p>
+        <p class="highlight-title">[Key result or breakthrough — e.g. "A 40% reduction in detection error using sparse Bayesian inference"]</p>
+        <p class="highlight-body">
+          [2–4 sentences describing this result in plain language. What did you discover or develop? Why does it matter? What problem does it solve? Write for a reader who is an expert but may not know your specific subfield.]
+        </p>
+        <p class="highlight-meta">
+          Related publication: <a href="#">[Paper title, Journal, Year]</a>
+        </p>
+      </div>
+
+      <div class="highlight-item">
+        <p class="highlight-label">Method · [Year]</p>
+        <p class="highlight-title">[Key method or tool you developed — e.g. "An open-source toolkit for operational modal analysis"]</p>
+        <p class="highlight-body">
+          [2–4 sentences. What is the method? What gap does it fill? Has it been used or validated?]
+        </p>
+        <p class="highlight-meta">
+          Related publication: <a href="#">[Paper title, Journal, Year]</a> ·
+          Code: <a href="#">GitHub ↗</a>
+        </p>
+      </div>
+
+      <div class="highlight-item">
+        <p class="highlight-label">Application · [Year]</p>
+        <p class="highlight-title">[Real-world application or deployment — e.g. "Field validation on a 120m cable-stayed bridge"]</p>
+        <p class="highlight-body">
+          [2–4 sentences. Where was the work applied? What were the outcomes? Any measurable impact?]
+        </p>
+        <p class="highlight-meta">
+          Related publication: <a href="#">[Paper title, Journal, Year]</a>
+        </p>
+      </div>
+
+      <div class="highlight-item">
+        <p class="highlight-label">Patent · [Year]</p>
+        <p class="highlight-title">[Patented invention — e.g. "Novel sensor array design for structural health monitoring"]</p>
+        <p class="highlight-body">
+          [2–4 sentences. What is the invention? What practical problem does it address? Current status — filed, granted?]
+        </p>
+        <p class="highlight-meta">
+          Patent No. [XXXXXXXX] · Filed [Year] · [Country / PCT]
+        </p>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: PUBLICATIONS
+════════════════════════════════════════ -->
+<div id="page-publications" class="page-panel">
+  <div class="inner">
+
+    <section>
+      <h2>Publications</h2>
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" onclick="switchSub(this,'published')">Published</button>
+        <button class="sub-tab-btn" onclick="switchSub(this,'inprep')">In Preparation</button>
+        <button class="sub-tab-btn" onclick="switchSub(this,'patents')">Patents</button>
+      </div>
+
+      <!-- PUBLISHED -->
+      <div class="sub-panel active" id="sub-published">
+        <div class="pub-item">
+          <p class="pub-venue">2024 · Journal of [Name] · <span class="badge">Published</span></p>
+          <p class="pub-title"><a href="#">[Paper title]</a></p>
+          <p class="pub-authors">Your Name, Co-author A, Co-author B</p>
+          <p class="pub-abstract">[One or two sentence summary of the paper's contribution and findings.]</p>
+        </div>
+        <!-- Copy the block above for each additional published paper -->
+      </div>
+
+      <!-- IN PREPARATION -->
+      <div class="sub-panel" id="sub-inprep">
+        <div class="pub-item">
+          <p class="pub-venue">2025 · Target: [Journal / Conference] · <span class="badge">Under Review</span></p>
+          <p class="pub-title">[Paper title]</p>
+          <p class="pub-authors">Your Name, Co-author A</p>
+          <p class="pub-abstract">[Brief description of the work and its expected contribution.]</p>
+        </div>
+        <div class="pub-item">
+          <p class="pub-venue">2025 · Target: [Journal] · <span class="badge">In Preparation</span></p>
+          <p class="pub-title">[Paper title]</p>
+          <p class="pub-authors">Your Name, Co-author A, Co-author B</p>
+          <p class="pub-abstract">[Brief description of the ongoing work.]</p>
+        </div>
+      </div>
+
+      <!-- PATENTS -->
+      <div class="sub-panel" id="sub-patents">
+        <div class="pub-item">
+          <p class="pub-venue">Filed [Year] · Patent No. [XXXXXXXX] · [Country / PCT] · <span class="badge">Filed</span></p>
+          <p class="pub-title">[Patent title]</p>
+          <p class="pub-authors">Inventors: Your Name, Co-inventor A</p>
+          <p class="pub-abstract">[Brief description of the invention and its practical application.]</p>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: BEYOND RESEARCH
+════════════════════════════════════════ -->
+<div id="page-beyond" class="page-panel">
+  <div class="inner">
+
+    <section>
+      <h2>Beyond Research</h2>
+      <p class="gallery-note">
+        A few things I pursue outside the lab — each feeds curiosity, patience, and attention to detail in ways that complement research.
+      </p>
+
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" onclick="switchSub(this,'astro')">Astrophotography</button>
+        <button class="sub-tab-btn" onclick="switchSub(this,'biking')">Biking</button>
+        <button class="sub-tab-btn" onclick="switchSub(this,'hiking')">Hiking</button>
+        <!-- Add more subtabs here as needed -->
+      </div>
+
+      <!-- ASTROPHOTOGRAPHY -->
+      <div class="sub-panel active" id="sub-astro">
+        <p class="gallery-note" style="margin-bottom:1.25rem;">
+          I photograph the night sky using my own telescope — combining optics, long-exposure calibration, and image stacking to reveal deep-sky objects. Images captured from [location / country].
+        </p>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <!-- <img src="images/astro1.jpg" alt="[Object name]"> -->
+            <div class="placeholder">Featured photo<br>images/astro1.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/astro2.jpg" alt="[Object]"> -->
+            <div class="placeholder">images/astro2.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/astro3.jpg" alt="[Object]"> -->
+            <div class="placeholder">images/astro3.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/astro4.jpg" alt="[Object]"> -->
+            <div class="placeholder">images/astro4.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/astro5.jpg" alt="[Object]"> -->
+            <div class="placeholder">images/astro5.jpg</div>
+          </div>
+        </div>
+        <p class="equipment">Equipment: [Telescope model] · [Camera] · [Mount] · [Location]</p>
+      </div>
+
+      <!-- BIKING -->
+      <div class="sub-panel" id="sub-biking">
+        <p class="gallery-note" style="margin-bottom:1.25rem;">
+          [A sentence or two about your biking — road, mountain, commuting? Favourite routes or regions? Any events or goals?]
+        </p>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <!-- <img src="images/bike1.jpg" alt="[Caption]"> -->
+            <div class="placeholder">Featured photo<br>images/bike1.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/bike2.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/bike2.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/bike3.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/bike3.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/bike4.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/bike4.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/bike5.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/bike5.jpg</div>
+          </div>
+        </div>
+        <p class="equipment">[Bike model / gear note · Favourite route or region]</p>
+      </div>
+
+      <!-- HIKING -->
+      <div class="sub-panel" id="sub-hiking">
+        <p class="gallery-note" style="margin-bottom:1.25rem;">
+          [A sentence or two about your hiking — where do you go? Any notable trails, summits, or trips? What draws you to it?]
+        </p>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <!-- <img src="images/hike1.jpg" alt="[Caption]"> -->
+            <div class="placeholder">Featured photo<br>images/hike1.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/hike2.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/hike2.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/hike3.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/hike3.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/hike4.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/hike4.jpg</div>
+          </div>
+          <div class="gallery-item">
+            <!-- <img src="images/hike5.jpg" alt="[Caption]"> -->
+            <div class="placeholder">images/hike5.jpg</div>
+          </div>
+        </div>
+        <p class="equipment">[Notable trails or regions · Gear note if any]</p>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: CONTACT
+════════════════════════════════════════ -->
+<div id="page-contact" class="page-panel">
+  <div class="inner">
+
+    <section>
+      <h2>Contact</h2>
+      <p class="contact-note">I am open to research collaborations, discussions, and general enquiries.</p>
+      <dl class="contact-grid">
+        <div class="contact-item">
+          <dt>Email</dt>
+          <dd><a href="mailto:you@email.com">you@email.com</a></dd>
+        </div>
+        <div class="contact-item">
+          <dt>GitHub</dt>
+          <dd><a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></dd>
+        </div>
+        <div class="contact-item">
+          <dt>Google Scholar</dt>
+          <dd><a href="#" target="_blank">View profile ↗</a></dd>
+        </div>
+        <div class="contact-item">
+          <dt>LinkedIn</dt>
+          <dd><a href="#" target="_blank">View profile ↗</a></dd>
+        </div>
+        <div class="contact-item">
+          <dt>ORCID</dt>
+          <dd><a href="#" target="_blank">[0000-0000-0000-0000]</a></dd>
+        </div>
+        <div class="contact-item">
+          <dt>Office</dt>
+          <dd>[Room, Building, University]</dd>
+        </div>
+      </dl>
+    </section>
+
+    <footer>
+      Your Name · [University] · [Year]
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const tabs = document.querySelectorAll('.page-tab');
+    const order = ['home','highlights','publications','beyond','contact'];
+    tabs[order.indexOf(name)].classList.add('active');
+  }
+
+  function switchSub(btn, name) {
+    btn.closest('section').querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+    btn.closest('.sub-tabs').querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sub-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
